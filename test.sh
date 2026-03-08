@@ -24,5 +24,13 @@ assert 15 '5*(9-6)'
 assert 4 '(3+5)/2'
 assert 4 '-15+(-3+3)+19'
 assert 32 '+4*+8'
+assert 0 '0==1'
+assert 1 '12==12'
+assert 14 '(12==12)+13'
+assert 1 '0<9'
+assert 0 '12<10'
+assert 0 '12>12'
+assert 1 '12>=12'
+assert 0 '12   <  11'
 
 echo OK
