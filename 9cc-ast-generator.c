@@ -26,13 +26,6 @@ struct Token {
 /* *******************  抽象構文木の再帰下降構文木   ******************** */
 /* 加減乗除算をトークン連結リストから抽象構文木を作るための構造体、enum, 関数群*/
 
-// 現状の加減乗除プログラムのコンパイラの文法
-// expr    = mul("+" mul | "-" mul)*
-// mul     = unary ("*" unary | "/" unary)*
-// unary   = ("+" | "-")? primary
-// primary = num | "(" expr ")"
-
-
 typedef enum {
 	ND_ADD,  // +
 	ND_SUB,  // -
@@ -68,7 +61,6 @@ Node *new_node_num(int val){
 // 関数の宣言
 Node *mul();
 Node *primary();
-Node *unary();
 bool consume(char);
 void expect(char);
 int expect_number();
@@ -88,25 +80,17 @@ Node *expr(){
 }
 
 Node *mul(){
-	Node *node = unary();
+	Node *node = primary();
 
 	for(;;){
 		if (consume('*')){
-			node = new_node(ND_MUL, node, unary());
+			node = new_node(ND_MUL, node, primary());
 		} else if (consume('/')) {
-			node = new_node(ND_DIV, node, unary());
+			node = new_node(ND_DIV, node, primary());
 		} else {
 			return node;
 		}
 	}
-}
-
-Node *unary(){
-	if (consume('+'))
-		return primary();
-	if (consume('-'))
-		return new_node(ND_SUB, new_node_num(0), primary());
-	return primary();
 }
 
 Node *primary(){
