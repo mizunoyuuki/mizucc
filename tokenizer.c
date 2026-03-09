@@ -18,6 +18,10 @@ bool is_alphabet(char p){
 	return (p >= 'a' && p <= 'z') || (p >= 'A' && p <= 'Z');
 }
 
+bool is_return(char *p){
+	return !memcmp("return", p, 6) && (*(p+6) == ' ');
+}
+
 // 入力文字列pをトークナイズしてそれを返す。
 Token *tokenize(char *p){
 	Token head;
@@ -40,6 +44,12 @@ Token *tokenize(char *p){
 		}
 		if (*p == '<' || *p == '>' || *p == '='){
 			cur = new_token(TK_RESERVED, cur, p++, 1);
+			continue;
+		}
+
+		if (is_return(p)){
+			cur = new_token(TK_RETURN, cur, p, 6);
+			p += 6;
 			continue;
 		}
 

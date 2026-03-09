@@ -9,6 +9,7 @@
 typedef enum {
 	TK_RESERVED,  // 記号
 	TK_IDENT,     // 識別子
+	TK_RETURN,    // returnキーワード
 	TK_NUM,       // 整数トークン
 	TK_EOF        // 入力の終わりを表すトークン
 } TokenKind;
@@ -27,19 +28,20 @@ struct Token {
 
 // Node型のNodeKindの列挙型
 typedef enum {
-	ND_ADD,  // +
-	ND_SUB,  // -
-	ND_MUL,  // *
-	ND_DIV,  // /
-	ND_EQ,   // ==
-	ND_NE,   // !=
-	ND_LT,   // <
-	ND_LE,   // <=
-	ND_GT,   // >
-	ND_GE,   // >=
-	ND_ASSIGN, // =(代入)
-	ND_LVAR, // ローカル変数
-	ND_NUM,  // 整数
+	ND_ADD,      // +
+	ND_SUB,      // -
+	ND_MUL,      // *
+	ND_DIV,      // /
+	ND_EQ,       // ==
+	ND_NE,       // !=
+	ND_LT,       // <
+	ND_LE,       // <=
+	ND_GT,       // >
+	ND_GE,       // >=
+	ND_ASSIGN,   // =(代入)
+	ND_LVAR,     // ローカル変
+        ND_RETURN,   // return
+	ND_NUM,      // 整数
 } NodeKind;
 
 // Node型
