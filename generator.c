@@ -39,23 +39,35 @@ void gen (Node *node){
 			printf("    ret\n");
 			return;
 		case ND_IF:
-			int label = label_count++;
+			int label_if = label_count++;
 			gen(node->cond);
 			printf("    pop rax\n");
 			printf("    cmp rax, 0\n");
 			if(node->els){
 				// else説がある場合
-				printf("    je .Lelse%d\n", label);
+				printf("    je .Lelse%d\n", label_if);
 				gen(node->then);
-				printf("    jmp .Lend%d\n", label);
-				printf(".Lelse%d:\n", label);
+				printf("    jmp .Lend%d\n", label_if);
+				printf(".Lelse%d:\n", label_if);
 				gen(node->els);
-				printf(".Lend%d:\n", label);
+				printf(".Lend%d:\n", label_if);
 			} else {
-				printf("    je .Lend%d\n", label);
+				printf("    je .Lend%d\n", label_if);
 				gen(node->then);
-				printf(".Lend%d:\n", label);
+				printf(".Lend%d:\n", label_if);
 			}
+			return;
+
+		case ND_WHILE:
+			int label_while = label_count++;
+			printf(".Lbegin%d:\n", label_while);
+			gen(node->lhs);
+			printf("    pop rax\n");
+			printf("    cmp rax, 0\n");
+			printf("    je .Lend%d\n", label_while);
+			gen(node->rhs);
+			printf("    jmp .Lbegin%d\n", label_while);
+			printf(".Lend%d:\n", label_while);
 			return;
 	}
 

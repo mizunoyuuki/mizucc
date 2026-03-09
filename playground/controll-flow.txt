@@ -18,3 +18,37 @@ unary        = ("+" | "-")? primary
 primary      = num | ident | "(" expr ")"
 
 expr? ";" を読み取る時は、1トークン先読みして、次のトークンが;ならば exprは存在しない。ということにして、そうでなければexprを読む、と実装すればいい。
+
+
+ifの実装について解説
+
+まず、if:else文のToken化と再帰下降構文解析によるAST化で、
+トークンにはTK_IF, TK_ELSEの二つがあるのに、
+Nodeには、ND_IFしかないことについて、
+
+if-else文は、
+stmt = "if" "(" expr ")" stmt ("else" stmt)?
+
+といったif-elseを含めて、一つのif分として構成される。
+
+ND_IF
+|_ cond: x
+|_ then: A
+|_ els : B  elseがなければない
+
+という二項の分ではなく、3項の文を形成する。
+なので、addとかの二項演算しとはちょっと違うNodeを形成する。
+
+
+### if (x) return 10; else return 20;
+生成されるアセンブリの流れ、
+
+1. gen(node->cond) - 条件式xを評価、結果をスタックにpush
+=> 一番最初に処理する＝先にgenする
+push [xの値]
+pop rax
+cmp rax, 0   # 0と比較(0=偽, それ以外=真)
+je .Lelse0   # 0なら(偽なら)elseへジャンプ
+
+2. 
+

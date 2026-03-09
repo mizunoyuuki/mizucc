@@ -55,6 +55,7 @@ Token *consume_ident(void);
 bool consume_return(char *op);
 bool consume_if(char *op);
 bool consume_else(char *op);
+bool consume_while(char *op);
 
 void program(){
 	int i = 0;
@@ -68,9 +69,7 @@ void program(){
 Node *stmt(){
 	Node *node;
 
-	if (consume_return("return")){
-		node = calloc(1, sizeof(Node));
-		node->kind = ND_RETURN;
+	if (consume_return("return")){ node = calloc(1, sizeof(Node)); node->kind = ND_RETURN;
 		node->lhs = expr();
 		expect(";");
 		return node;
@@ -86,6 +85,16 @@ Node *stmt(){
 		if(consume_else("else")){
 			node->els = stmt();
 		}
+		return node;
+	}
+
+	if (consume_while("while")){
+		node = calloc(1, sizeof(Node));
+		node->kind = ND_WHILE;
+		expect("(");
+		node->lhs = expr();
+		expect(")");
+		node->rhs = stmt();
 		return node;
 	}
 
@@ -246,6 +255,13 @@ bool consume_else(char *op){
 	if (token->kind != TK_ELSE || strlen(op) != token->len || memcmp(token->str, op, token->len))
 		return false;
 
+	token = token->next;
+	return true;
+}
+
+bool consume_while(char *op){
+	if (token->kind != TK_WHILE || strlen(op) != token->len || memcmp(token->str, op, token->len))
+		return false;
 	token = token->next;
 	return true;
 }
