@@ -17,7 +17,7 @@ Node *new_node_num(int val){
 
 // 現在の文法
 // program    = stmt*
-// stmt       = expr ";"
+// stmt       = expr ";" || "return" expr ";"
 // expr       = assign
 // assign     = equality ("=" assign)?
 // equality   = relational ("==" relational | "!=" relational)*
@@ -48,6 +48,7 @@ bool at_eof();
 LVar *find_lvar(Token *);
 
 Token *consume_ident(void);
+bool consume_return(char *op);
 
 void program(){
 	int i = 0;
@@ -59,10 +60,20 @@ void program(){
 }
 
 Node *stmt(){
-	Node *node =  expr();
+	Node *node;
+	if (consume_return("return")){
+		node = calloc(1, sizeof(Node));
+		node->kind = ND_RETURN;
+		node->lhs = expr();
+	} else {
+	        node = expr();
+	}
+
 	expect(";");
+
 	return node;
 }
+
 
 Node *expr(){
 	return assign();
@@ -195,6 +206,14 @@ bool consume(char *op){
 	return true;
 }
 
+bool consume_return(char *op){
+	if (token->kind != TK_RETURN || strlen(op) != token->len || memcmp(token->str, op, token->len))
+		return false;
+
+	token = token->next;
+	return true;
+}
+
 // 次のトークンが期待している記号の時には、トークンを一つ読み進める。
 // それ以外の場合にはエラーを報告する。
 void expect(char *op){
@@ -202,6 +221,7 @@ void expect(char *op){
 		error("'%c'ではありません。", op);
 	token = token->next;
 }
+
 
 // 次のトークンが数値の場合、トークンを一つ読み進めてその数値を返す
 // それ以外の場合はエラーを報告する。

@@ -39,5 +39,17 @@ assert 10 'a = 11; b = 1; a-b;'
 assert 10 'abc = 23; def = 10; def = 13; abc - def;'
 assert 23 'abc = 23; def = 10; def = 13; abc;'
 assert 13 'abc = 23; def = 10; def = 13; def;'
+assert 14 '
+abc = 23;
+def = 10;
+def = 234 - 220;
+'
+
+assert 19 '
+abc = 19;
+name = 111;
+return abc;
+return name;
+'
 
 echo OK
