@@ -1,0 +1,20 @@
+制御構文を足す
+
+以下の文法となる。
+
+program      = stmt*
+stmt         = expr ";"
+             | "if" "(" expr ")" stmt ( "else" stmt)?
+             | "while" "(" expr ")"  stmt
+             | "for" "(" expr? ";" expr? ";" expr? ";" ")" stmt
+             | "return" expr ";"
+expr         = assign
+assign       = equality ("=" assign)?
+equality     = relational ("==" relational | "!=" relational)*
+relational   = add ("<" add | "<=" add | ">" add | ">=" add)*
+add          = mul ("+" mul | "-" mul)*
+mul          = unary ("*" unary | "/" unary)*
+unary        = ("+" | "-")? primary
+primary      = num | ident | "(" expr ")"
+
+expr? ";" を読み取る時は、1トークン先読みして、次のトークンが;ならば exprは存在しない。ということにして、そうでなければexprを読む、と実装すればいい。
