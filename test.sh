@@ -52,4 +52,23 @@ return abc;
 return name;
 '
 
+assert 11 '
+a = 10;
+b = 0;
+if (a == b)
+	return b+3;
+else if (a != b + 10)
+	return a;
+else 
+	return 11;
+'
+
+assert 3 '
+a = 0;
+b = 1;
+while (a <= 2)
+	a = a+1;
+a;
+'
+
 echo OK

@@ -22,6 +22,18 @@ bool is_return(char *p){
 	return !memcmp("return", p, 6) && (*(p+6) == ' ');
 }
 
+bool is_if(char *p){
+	return !memcmp(p, "if", 2) && ( (*(p+2) == ' ') || (*(p+2) == '(') );
+}
+
+bool is_else(char *p){
+	return !memcmp(p, "else", 4) && !is_alphabet(*(p+4));
+}
+
+bool is_while(char *p){
+	return !memcmp(p, "while", 5) && !is_alphabet(*(p+5));
+}
+
 // 入力文字列pをトークナイズしてそれを返す。
 Token *tokenize(char *p){
 	Token head;
@@ -44,6 +56,24 @@ Token *tokenize(char *p){
 		}
 		if (*p == '<' || *p == '>' || *p == '='){
 			cur = new_token(TK_RESERVED, cur, p++, 1);
+			continue;
+		}
+
+		if (is_if(p)){
+			cur = new_token(TK_IF, cur, p, 2);
+			p += 2;
+			continue;
+		}
+
+		if (is_else(p)){
+			cur = new_token(TK_ELSE, cur, p, 4);
+			p += 4;
+			continue;
+		}
+
+		if (is_while(p)){
+			cur = new_token(TK_WHILE, cur, p, 5);
+			p += 5;
 			continue;
 		}
 
