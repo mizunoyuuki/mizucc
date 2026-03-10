@@ -80,4 +80,54 @@ for ( i=0; i<4; i= i+1)
 a;
 '
 
+assert 40 '
+a=0;
+b=0;
+for (i=0; i<4; i= i+1){
+	a = a+10;
+	b = b+11;
+}
+a;
+'
+
+assert 44 '
+a=0;
+b=0;
+for (i=0; i<4; i= i+1){
+	a = a+10;
+	b = b+11;
+}
+b;
+'
+
+assert 40 '
+a=0;
+b=0;
+for (i=0; i<4; i= i+1){
+	a = a+10;
+	b = b+11;
+	if (a > b){
+		a = a + 1;
+	} else {
+	        b = b + 1;
+        }
+}
+
+a;
+'
+assert 48 '
+a=0;
+b=0;
+for (i=0; i<4; i= i+1){
+	a = a+10;
+	b = b+11;
+	if (a > b){
+		a = a + 1;
+	} else {
+	        b = b + 1;
+        }
+}
+
+b;
+'
 echo OK

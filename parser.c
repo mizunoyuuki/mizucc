@@ -89,6 +89,23 @@ Node *stmt(){
 		return node;
 	}
 
+	// node->blockは、Node型のポインタの配列となっている
+	// Node **block;
+	if (consume("{")){
+		node = calloc(1, sizeof(Node));
+		node->kind = ND_BLOCK;
+		node->blocks = calloc(100, sizeof(Node*));
+		Node **blocks = node->blocks;
+
+		int i = 0;
+		while (!consume("}")){
+			blocks[i] = stmt();
+			i += 1;
+		}
+		node->block_len = i;
+		return node;
+	}
+
 	if (consume_while("while")){
 		node = calloc(1, sizeof(Node));
 		node->kind = ND_WHILE;

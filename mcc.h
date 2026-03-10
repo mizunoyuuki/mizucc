@@ -48,6 +48,7 @@ typedef enum {
         ND_IF,       // if
 	ND_WHILE,    // while
 	ND_FOR,      // for
+	ND_BLOCK,    // {} ブロック
 	ND_NUM,      // 整数
 } NodeKind;
 
@@ -70,7 +71,11 @@ struct Node {
 	Node *fcond;    // 条件式(expr?)
 	Node *finc;     // 更新式(expr?)
 	Node *fthen;    // ループの中身(stmt)
-		       
+		
+	// Block(複文)
+	Node **blocks;
+	int block_len;
+
 	int val;       // kindがND_NUMの場合のみ扱う
         int offset;    // kindがND_LVARの場合のみ使う
 };

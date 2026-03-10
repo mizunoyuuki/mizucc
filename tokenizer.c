@@ -35,10 +35,27 @@ bool is_while(char *p){
 }
 
 bool is_for(char *p){
-	return !memcmp(p, "for", 3) && !is_alphabet(*(p+5));
+	return !memcmp(p, "for", 3) && !is_alphabet(*(p+3));
 }
 
 // 入力文字列pをトークナイズしてそれを返す。
+// 現在の文法
+// program      = stmt*
+// stmt         = expr ";"
+//              | "{" stmt* "}"
+//              | "if" "(" expr ")" stmt ("else" expr)?
+//              | "while" "(" expr ")" stmt
+//              | "for" "(" expr? ";" expr? ";" expr ")" stmt
+//              | "return" expr ";"
+// expr         = assign
+// assign       = equality ("=" assign)?
+// equality     = relational ("==" relational | "!=" relational)*
+// relational   = add ("<" add | "<=" add | ">" add | ">=" add)*
+// add          = mul ("+" mul | "-" mul)*
+// mul          = unary ("*" unary | "/" unary)
+// unary        = ("+" | "-")? primary
+// primary      = num | ident | "(" expr ")"
+
 Token *tokenize(char *p){
 	Token head;
 	head.next = NULL;
@@ -59,6 +76,11 @@ Token *tokenize(char *p){
 			continue;
 		}
 		if (*p == '<' || *p == '>' || *p == '='){
+			cur = new_token(TK_RESERVED, cur, p++, 1);
+			continue;
+		}
+
+		if (*p == '{' || *p == '}'){
 			cur = new_token(TK_RESERVED, cur, p++, 1);
 			continue;
 		}
