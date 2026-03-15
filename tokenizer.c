@@ -15,7 +15,7 @@ bool startswith(char *p, char *q){
 }
 
 bool is_alphabet(char p){
-	return (p >= 'a' && p <= 'z') || (p >= 'A' && p <= 'Z');
+	return (p >= 'a' && p <= 'z') || (p >= 'A' && p <= 'Z') || p == '_';
 }
 
 bool is_return(char *p){

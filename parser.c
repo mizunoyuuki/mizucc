@@ -18,6 +18,7 @@ Node *new_node_num(int val){
 // 現在の文法
 // program    = stmt*
 // stmt       = expr ";"
+//            | "{" stmt "}"
 //            | "if" "(" expr ")" stmt ( "else" stmt )?
 //            | "while" "(" expr ")" stmt
 //            | "for" "(" expr? ";" expr? ";" expr?  ")" stmt
@@ -94,15 +95,14 @@ Node *stmt(){
 	if (consume("{")){
 		node = calloc(1, sizeof(Node));
 		node->kind = ND_BLOCK;
-		node->blocks = calloc(100, sizeof(Node*));
-		Node **blocks = node->blocks;
 
-		int i = 0;
+		Node *cur_block;
+		cur_block->next = NULL;
+
 		while (!consume("}")){
-			blocks[i] = stmt();
-			i += 1;
+			Node *block_statement = calloc(1, sizeof(Node));
+			node
 		}
-		node->block_len = i;
 		return node;
 	}
 
